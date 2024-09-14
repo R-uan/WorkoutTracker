@@ -8,7 +8,6 @@ namespace WorkoutTracker.Application.Models
 		public required string Email { get; set; }
 		public required string Username { get; set; }
 
-		[JsonIgnore]
 		public required string Password { get; set; }
 
 		public static UserModel Create(User user)
