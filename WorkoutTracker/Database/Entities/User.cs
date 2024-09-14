@@ -1,3 +1,6 @@
+using WorkoutTracker.Application.Models;
+using WorkoutTracker.Application.Utilities;
+
 namespace WorkoutTracker.Database.Entities
 {
 	public class User
@@ -11,17 +14,19 @@ namespace WorkoutTracker.Database.Entities
 
 		public List<Workout>? Workouts { get; set; }
 
-		public static User Create(string username, string email, string password)
+		public static User Create(UserModel user)
 		{
+			string hashPassword = PasswordEncryption.Hash(user.Password);
+
 			return new User
 			{
 				Id = Guid.NewGuid(),
-				Username = username,
-				Email = email,
-#warning Should hash password
-				PasswordHash = password,
+				Email = user.Email,
+				Username = user.Username,
+				PasswordHash = hashPassword,
+
 				CreatedAt = DateTime.Now,
-				UpdatedAt = DateTime.Now
+				UpdatedAt = DateTime.Now,
 			};
 		}
 	}
