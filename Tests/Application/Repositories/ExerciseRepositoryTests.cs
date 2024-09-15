@@ -65,8 +65,10 @@ public class ExerciseRepositoryTests
 		var target = await _dbContext.Exercise.FindAsync(testEntity.Id);
 		var testMethod = await _exerciseRepository.UpdateExercise(target!, updateEntity);
 
-		Assert.NotNull(testMethod);
-		Assert.Equal(updateEntity.Name, testMethod.Name);
+		var check = await _dbContext.Exercise.FindAsync(testEntity.Id);
+		Assert.True(testMethod);
+		Assert.Equal(updateEntity.Name, check!.Name);
+		Assert.Equal(testEntity.Category, check.Category);
 	}
 
 	[Fact]

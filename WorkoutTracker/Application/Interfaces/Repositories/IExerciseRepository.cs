@@ -9,5 +9,5 @@ public interface IExerciseRepository
 	Task<bool> DeleteExercise(Exercise exercise);
 	Task<Exercise?> FindExerciseByGuid(Guid guid);
 	Task<Exercise> SaveExercise(Exercise exercise);
-	Task<Exercise> UpdateExercise(Exercise target, ExerciseUpdateModel update);
+	Task<bool> UpdateExercise(Exercise target, ExerciseUpdateModel update);
 }

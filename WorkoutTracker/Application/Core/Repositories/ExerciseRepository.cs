@@ -1,4 +1,5 @@
 using System;
+using Microsoft.EntityFrameworkCore;
 using WorkoutTracker.Application.Interfaces.Repositories;
 using WorkoutTracker.Application.Models;
 using WorkoutTracker.Database;
@@ -8,23 +9,30 @@ namespace WorkoutTracker.Application.Core.Repositories;
 
 public class ExerciseRepository(ApplicationDbContext _db) : IExerciseRepository
 {
-	public Task<bool> DeleteExercise(Exercise exercise)
+	public async Task<bool> DeleteExercise(Exercise exercise)
 	{
-		throw new NotImplementedException();
+		_db.Exercise.Remove(exercise);
+		var changes = await _db.SaveChangesAsync();
+		return changes > 0;
 	}
 
-	public Task<Exercise?> FindExerciseByGuid(Guid guid)
+	public async Task<Exercise?> FindExerciseByGuid(Guid guid) => await _db.Exercise.FindAsync(guid);
+
+	public async Task<Exercise> SaveExercise(Exercise exercise)
 	{
-		throw new NotImplementedException();
+		var save = await _db.Exercise.AddAsync(exercise);
+		await _db.SaveChangesAsync();
+		return save.Entity;
 	}
 
-	public Task<Exercise> SaveExercise(Exercise exercise)
+	public async Task<bool> UpdateExercise(Exercise target, ExerciseUpdateModel update)
 	{
-		throw new NotImplementedException();
-	}
+		if (update.Name != null) target.Name = update.Name;
+		if (update.Category != null) target.Category = update.Category;
+		if (update.MuscleGroup != null) target.MuscleGroup = update.MuscleGroup;
+		if (update.Description != null) target.Description = update.Description;
 
-	public async Task<Exercise> UpdateExercise(Exercise target, ExerciseUpdateModel update)
-	{
-		throw new NotImplementedException();
+		var changes = await _db.SaveChangesAsync();
+		return changes > 0;
 	}
 }
