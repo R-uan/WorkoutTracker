@@ -10,8 +10,8 @@ namespace Tests.Application.Repositories
 {
 	public class UserRepositoryTests
 	{
-		public ApplicationDbContext _dbContext { get; set; }
-		public IUserRepository _repository { get; set; }
+		public readonly IUserRepository _repository;
+		public readonly ApplicationDbContext _dbContext;
 
 		public UserRepositoryTests()
 		{
