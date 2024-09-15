@@ -1,4 +1,5 @@
 using System;
+using WorkoutTracker.Application.Models;
 
 namespace WorkoutTracker.Database.Entities;
 
@@ -24,6 +25,19 @@ public class Workout
 			Date = date,
 			Description = description,
 			Duration = duration,
+		};
+	}
+
+	public static Workout FromModel(WorkoutModel model, Guid userId)
+	{
+		return new Workout()
+		{
+			Id = Guid.NewGuid(),
+			UserId = userId,
+			Name = model.Name,
+			Date = model.Date,
+			Duration = model.Duration,
+			Description = model.Description,
 		};
 	}
 }
