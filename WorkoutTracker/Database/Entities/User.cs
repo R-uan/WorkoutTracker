@@ -14,6 +14,23 @@ namespace WorkoutTracker.Database.Entities
 
 		public List<Workout>? Workouts { get; set; }
 
+		public static User Create(string username, string email, string password)
+		{
+			string hashPassword = PasswordEncryption.Hash(password);
+
+			return new User
+			{
+				Id = Guid.NewGuid(),
+				Email = email,
+				Username = username,
+				PasswordHash = hashPassword,
+
+				CreatedAt = DateTime.Now,
+				UpdatedAt = DateTime.Now,
+			};
+
+		}
+
 		public static User Create(UserModel user)
 		{
 			string hashPassword = PasswordEncryption.Hash(user.Password);

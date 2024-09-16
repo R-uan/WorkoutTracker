@@ -15,9 +15,9 @@ public class WorkoutRepository(ApplicationDbContext _db) : IWorkoutRepository
 									select workout).ToListAsync();
 	}
 
-	public async Task<Workout?> FindWorkoutByGuid(Guid workoutGuid) => await _db.Workout.FindAsync(workoutGuid);
+	public async Task<Workout?> FindByGuid(Guid workoutGuid) => await _db.Workout.FindAsync(workoutGuid);
 
-	public async Task<Workout> SaveWorkout(Workout workout)
+	public async Task<Workout> Save(Workout workout)
 	{
 		var save = await _db.Workout.AddAsync(workout);
 		await _db.SaveChangesAsync();

@@ -5,8 +5,8 @@ namespace WorkoutTracker.Application.Interfaces.Repositories;
 
 public interface IWorkoutRepository
 {
-	Task<Workout> SaveWorkout(Workout workout);
-	Task<Workout?> FindWorkoutByGuid(Guid workoutGuid);
+	Task<Workout> Save(Workout workout);
+	Task<Workout?> FindByGuid(Guid workoutGuid);
 	Task<List<Workout>> FindUsersWorkouts(Guid userId);
 
 }

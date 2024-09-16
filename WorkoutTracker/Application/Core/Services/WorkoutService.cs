@@ -13,7 +13,7 @@ public class WorkoutService(IWorkoutRepository _workoutRepository, IUserReposito
 	{
 		_ = await _userRepository.FindUserByGuid(userGuid) ??
 		throw new KeyNotFoundException("User was not found.");
-		return await _workoutRepository.SaveWorkout(Workout.FromModel(workoutModel, userGuid));
+		return await _workoutRepository.Save(Workout.FromModel(workoutModel, userGuid));
 	}
 
 	public async Task<List<Workout>> FindUsersWorkouts(Guid userGuid)
@@ -25,7 +25,7 @@ public class WorkoutService(IWorkoutRepository _workoutRepository, IUserReposito
 
 	public async Task<Workout> FindWorkoutByGuid(Guid workoutGuid)
 	{
-		return await _workoutRepository.FindWorkoutByGuid(workoutGuid) ??
+		return await _workoutRepository.FindByGuid(workoutGuid) ??
 		throw new KeyNotFoundException("Workout was not found.");
 	}
 }

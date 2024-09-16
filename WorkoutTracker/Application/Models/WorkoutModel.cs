@@ -10,6 +10,17 @@ public class WorkoutModel
 	public int Duration { get; set; }
 	public string? Description { get; set; }
 
+	public static WorkoutModel Create(string name, DateTime date, int duration, string? description)
+	{
+		return new WorkoutModel
+		{
+			Name = name,
+			Date = date,
+			Duration = duration,
+			Description = description,
+		};
+	}
+
 	public static WorkoutModel FromEntity(Workout entity)
 	{
 		return new WorkoutModel
