@@ -17,10 +17,17 @@ public class WorkoutRepository(ApplicationDbContext _db) : IWorkoutRepository
 
 	public async Task<Workout?> FindByGuid(Guid workoutGuid) => await _db.Workout.FindAsync(workoutGuid);
 
-	public async Task<Workout> Save(Workout workout)
+	public async Task<Workout> SaveNew(Workout workout)
 	{
 		var save = await _db.Workout.AddAsync(workout);
 		await _db.SaveChangesAsync();
 		return save.Entity;
+	}
+
+	public async Task<bool> Delete(Workout entity)
+	{
+		_db.Workout.Remove(entity);
+		var deletions = await _db.SaveChangesAsync();
+		return deletions > 0;
 	}
 }

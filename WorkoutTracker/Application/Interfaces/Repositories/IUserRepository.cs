@@ -1,10 +1,9 @@
+using WorkoutTracker.Application.Interfaces.Repositories;
 using WorkoutTracker.Database.Entities;
 
 namespace WorkoutTracker.Application.Interfaces
 {
-	public interface IUserRepository
+	public interface IUserRepository : IGenericRepository<User>
 	{
-		Task<User> SaveUser(User user);
-		Task<User?> FindUserByGuid(Guid userGuid);
 	}
 }

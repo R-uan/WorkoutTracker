@@ -4,6 +4,6 @@ namespace WorkoutTracker.Application.Interfaces
 {
 	public interface IUserService
 	{
-		Task<UserModel> RegisterUser(UserModel data);
+		Task<UserModel> CreateNewUser(UserModel data);
 	}
 }

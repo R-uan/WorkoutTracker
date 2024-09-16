@@ -3,10 +3,7 @@ using WorkoutTracker.Database.Entities;
 
 namespace WorkoutTracker.Application.Interfaces.Repositories;
 
-public interface IWorkoutRepository
+public interface IWorkoutRepository : IGenericRepository<Workout>
 {
-	Task<Workout> Save(Workout workout);
-	Task<Workout?> FindByGuid(Guid workoutGuid);
 	Task<List<Workout>> FindUsersWorkouts(Guid userId);
-
 }

@@ -11,14 +11,14 @@ public class WorkoutService(IWorkoutRepository _workoutRepository, IUserReposito
 {
 	public async Task<Workout> CreateWorkout(WorkoutModel workoutModel, Guid userGuid)
 	{
-		_ = await _userRepository.FindUserByGuid(userGuid) ??
+		_ = await _userRepository.FindByGuid(userGuid) ??
 		throw new KeyNotFoundException("User was not found.");
-		return await _workoutRepository.Save(Workout.FromModel(workoutModel, userGuid));
+		return await _workoutRepository.SaveNew(Workout.FromModel(workoutModel, userGuid));
 	}
 
 	public async Task<List<Workout>> FindUsersWorkouts(Guid userGuid)
 	{
-		_ = await _userRepository.FindUserByGuid(userGuid) ??
+		_ = await _userRepository.FindByGuid(userGuid) ??
 		throw new KeyNotFoundException("User was not found.");
 		return await _workoutRepository.FindUsersWorkouts(userGuid);
 	}
