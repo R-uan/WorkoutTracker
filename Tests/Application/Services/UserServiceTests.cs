@@ -19,14 +19,14 @@ namespace Tests.Application.Services
 		}
 
 		[Fact]
-		public async Task RegisterUserTest_ShouldReturnAUserModelEntity()
+		public async Task CreateNewUserTest_ShouldReturnAUserModelEntity()
 		{
 			var testEntity = UserModel.Create("username", "email", "password");
-			_mockRepository.Setup(repo => repo.SaveUser(It.IsAny<User>())).ReturnsAsync(User.Create(testEntity));
+			_mockRepository.Setup(repo => repo.SaveNew(It.IsAny<User>())).ReturnsAsync(User.FromModel(testEntity));
 
-			var testMethod = await _service.RegisterUser(testEntity);
+			var testMethod = await _service.CreateNewUser(testEntity);
 
-			_mockRepository.Verify(repo => repo.SaveUser(It.IsAny<User>()), Times.Once);
+			_mockRepository.Verify(repo => repo.SaveNew(It.IsAny<User>()), Times.Once);
 
 			Assert.NotNull(testMethod);
 			Assert.IsType<UserModel>(testMethod);

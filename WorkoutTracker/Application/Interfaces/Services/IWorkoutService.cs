@@ -5,8 +5,8 @@ namespace WorkoutTracker.Application.Interfaces.Services
 {
 	public interface IWorkoutService
 	{
-		Task<Workout> FindWorkoutByGuid(Guid workoutGuid);
+		Task<Workout> FindByGuid(Guid workoutGuid);
 		Task<List<Workout>> FindUsersWorkouts(Guid userGuid);
-		Task<Workout> CreateWorkout(WorkoutModel workoutModel, Guid userGuid);
+		Task<Workout> Create(WorkoutModel workoutModel, Guid userGuid);
 	}
 }

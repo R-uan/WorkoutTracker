@@ -15,7 +15,7 @@ namespace WorkoutTracker.Application.Controllers
 			{
 				var validate = _validator.Validate(user);
 				if (!validate.IsValid) return BadRequest(validate.Errors);
-				var registration = await _service.RegisterUser(user);
+				var registration = await _service.CreateNewUser(user);
 				return Ok(registration);
 			}
 			catch (System.Exception ex)

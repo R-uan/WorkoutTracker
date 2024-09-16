@@ -1,4 +1,5 @@
 using System;
+using WorkoutTracker.Application.Models;
 
 namespace WorkoutTracker.Database.Entities;
 
@@ -20,6 +21,18 @@ public class Exercise
 			Category = category,
 			MuscleGroup = muscleGroup,
 			Description = description,
+		};
+	}
+
+	public static Exercise FromModel(ExerciseModel model)
+	{
+		return new Exercise()
+		{
+			Id = Guid.NewGuid(),
+			Category = model.Category,
+			MuscleGroup = model.MuscleGroup,
+			Name = model.Name,
+			Description = model.Description,
 		};
 	}
 }

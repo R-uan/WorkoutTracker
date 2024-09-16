@@ -28,10 +28,10 @@ public class WorkoutServiceTests
 		var testUser = User.Create("username", "email", "Password");
 		var testWorkout = WorkoutModel.Create("name", DateTime.Now, 0, null);
 
-		_mockUserRepository.Setup(u => u.FindUserByGuid(It.IsAny<Guid>())).ReturnsAsync(testUser);
-		_mockWorkoutRepository.Setup(w => w.Save(It.IsAny<Workout>())).ReturnsAsync(Workout.FromModel(testWorkout, testUser.Id));
+		_mockUserRepository.Setup(u => u.FindByGuid(It.IsAny<Guid>())).ReturnsAsync(testUser);
+		_mockWorkoutRepository.Setup(w => w.SaveNew(It.IsAny<Workout>())).ReturnsAsync(Workout.FromModel(testWorkout, testUser.Id));
 
-		var createWorkout = await _workoutService.CreateWorkout(testWorkout, testUser.Id);
+		var createWorkout = await _workoutService.Create(testWorkout, testUser.Id);
 
 		Assert.NotNull(createWorkout);
 		Assert.IsType<Workout>(createWorkout);
@@ -42,10 +42,10 @@ public class WorkoutServiceTests
 	{
 		var workout = WorkoutModel.Create("name", DateTime.Now, 0, null);
 
-		_mockUserRepository.Setup(u => u.FindUserByGuid(It.IsAny<Guid>())).ReturnsAsync((User)null!);
+		_mockUserRepository.Setup(u => u.FindByGuid(It.IsAny<Guid>())).ReturnsAsync((User)null!);
 
 		var exception = await Assert.ThrowsAsync<KeyNotFoundException>(
-			async () => await _workoutService.CreateWorkout(workout, Guid.NewGuid())
+			async () => await _workoutService.Create(workout, Guid.NewGuid())
 		);
 
 		Assert.IsType<KeyNotFoundException>(exception);
@@ -60,7 +60,7 @@ public class WorkoutServiceTests
 		_mockWorkoutRepository.Setup(w => w.FindByGuid(It.IsAny<Guid>()))
 		.ReturnsAsync(Workout.FromModel(testWorkout, Guid.NewGuid()));
 
-		var findWorkout = await _workoutService.FindWorkoutByGuid(Guid.NewGuid());
+		var findWorkout = await _workoutService.FindByGuid(Guid.NewGuid());
 
 		Assert.NotNull(findWorkout);
 		Assert.IsType<Workout>(findWorkout);
@@ -72,7 +72,7 @@ public class WorkoutServiceTests
 		_mockWorkoutRepository.Setup(w => w.FindByGuid(It.IsAny<Guid>())).ReturnsAsync((Workout)null!);
 
 		var exception = await Assert.ThrowsAsync<KeyNotFoundException>(
-			async () => await _workoutService.FindWorkoutByGuid(Guid.NewGuid())
+			async () => await _workoutService.FindByGuid(Guid.NewGuid())
 		);
 
 		Assert.IsType<KeyNotFoundException>(exception);
@@ -85,7 +85,7 @@ public class WorkoutServiceTests
 		var testUser = User.Create("username", "email", "Password");
 		var testWorkout = WorkoutModel.Create("name", DateTime.Now, 0, null);
 
-		_mockUserRepository.Setup(u => u.FindUserByGuid(It.IsAny<Guid>())).ReturnsAsync(testUser);
+		_mockUserRepository.Setup(u => u.FindByGuid(It.IsAny<Guid>())).ReturnsAsync(testUser);
 		_mockWorkoutRepository.Setup(w => w.FindUsersWorkouts(testUser.Id))
 		.ReturnsAsync([Workout.FromModel(testWorkout, testUser.Id)]);
 
@@ -100,7 +100,7 @@ public class WorkoutServiceTests
 	{
 		var workout = WorkoutModel.Create("name", DateTime.Now, 0, null);
 
-		_mockUserRepository.Setup(u => u.FindUserByGuid(It.IsAny<Guid>())).ReturnsAsync((User)null!);
+		_mockUserRepository.Setup(u => u.FindByGuid(It.IsAny<Guid>())).ReturnsAsync((User)null!);
 
 		var exception = await Assert.ThrowsAsync<KeyNotFoundException>(
 			async () => await _workoutService.FindUsersWorkouts(Guid.NewGuid())

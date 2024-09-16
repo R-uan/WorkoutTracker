@@ -32,7 +32,7 @@ namespace WorkoutTracker.Database.Entities
 
 		}
 
-		public static User Create(UserModel user)
+		public static User FromModel(UserModel user)
 		{
 			string hashPassword = PasswordEncryption.Hash(user.Password);
 

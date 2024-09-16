@@ -45,7 +45,7 @@ namespace Tests.Application.Repositories
 		public async Task SaveWorkout_ShouldReturnWorkoutEntity()
 		{
 			var testEntity = Workout.Create(Guid.NewGuid(), "name", DateTime.Now, 0, null);
-			var testMethod = await _workoutRepository.Save(testEntity);
+			var testMethod = await _workoutRepository.SaveNew(testEntity);
 
 			Assert.NotNull(testMethod);
 			Assert.IsType<Workout>(testMethod);
@@ -62,6 +62,19 @@ namespace Tests.Application.Repositories
 			var testMethod = await _workoutRepository.FindUsersWorkouts(testUserGuid);
 			Assert.NotNull(testMethod);
 			Assert.Single(testMethod);
+		}
+
+		[Fact]
+		public async Task DeleteExerciseTest_ShouldReturnTrue()
+		{
+			var testEntity = Workout.Create(Guid.NewGuid(), "name", DateTime.Now, 0, null);
+			await _dbContext.Workout.AddAsync(testEntity);
+			await _dbContext.SaveChangesAsync();
+
+			var workout = await _dbContext.Workout.FindAsync(testEntity.Id);
+			var testMethod = await _workoutRepository.Delete(workout!);
+
+			Assert.True(testMethod);
 		}
 	}
 }

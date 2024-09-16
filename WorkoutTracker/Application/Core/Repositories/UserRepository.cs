@@ -21,6 +21,5 @@ namespace WorkoutTracker.Application.Repositories
 			var deletions = await _db.SaveChangesAsync();
 			return deletions > 0;
 		}
-
 	}
 }

@@ -9,7 +9,7 @@ namespace WorkoutTracker.Application.Core.Services;
 
 public class WorkoutService(IWorkoutRepository _workoutRepository, IUserRepository _userRepository) : IWorkoutService
 {
-	public async Task<Workout> CreateWorkout(WorkoutModel workoutModel, Guid userGuid)
+	public async Task<Workout> Create(WorkoutModel workoutModel, Guid userGuid)
 	{
 		_ = await _userRepository.FindByGuid(userGuid) ??
 		throw new KeyNotFoundException("User was not found.");
@@ -23,7 +23,7 @@ public class WorkoutService(IWorkoutRepository _workoutRepository, IUserReposito
 		return await _workoutRepository.FindUsersWorkouts(userGuid);
 	}
 
-	public async Task<Workout> FindWorkoutByGuid(Guid workoutGuid)
+	public async Task<Workout> FindByGuid(Guid workoutGuid)
 	{
 		return await _workoutRepository.FindByGuid(workoutGuid) ??
 		throw new KeyNotFoundException("Workout was not found.");

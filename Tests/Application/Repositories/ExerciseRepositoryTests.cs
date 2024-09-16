@@ -6,81 +6,82 @@ using WorkoutTracker.Application.Models;
 using WorkoutTracker.Database;
 using WorkoutTracker.Database.Entities;
 
-namespace Tests.Application.Repositories;
-
-public class ExerciseRepositoryTests
+namespace Tests.Application.Repositories
 {
-	public readonly ApplicationDbContext _dbContext;
-	public readonly IExerciseRepository _exerciseRepository;
-
-	public ExerciseRepositoryTests()
+	public class ExerciseRepositoryTests
 	{
-		var dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-		.UseInMemoryDatabase(databaseName: "TestDatabase").Options;
+		public readonly ApplicationDbContext _dbContext;
+		public readonly IExerciseRepository _exerciseRepository;
 
-		_dbContext = new ApplicationDbContext(dbOptions);
-		_exerciseRepository = new ExerciseRepository(_dbContext);
-	}
+		public ExerciseRepositoryTests()
+		{
+			var dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+			.UseInMemoryDatabase(databaseName: "TestDatabase").Options;
 
-	[Fact]
-	public async Task FindExerciseByIdTest_ShouldReturnExerciseEntity()
-	{
-		var testEntity = Exercise.Create("name", "category", "muscle group", null);
-		await _dbContext.Exercise.AddAsync(testEntity);
-		await _dbContext.SaveChangesAsync();
+			_dbContext = new ApplicationDbContext(dbOptions);
+			_exerciseRepository = new ExerciseRepository(_dbContext);
+		}
 
-		var testMethod = await _exerciseRepository.FindExerciseByGuid(testEntity.Id);
+		[Fact]
+		public async Task FindExerciseByIdTest_ShouldReturnExerciseEntity()
+		{
+			var testEntity = Exercise.Create("name", "category", "muscle group", null);
+			await _dbContext.Exercise.AddAsync(testEntity);
+			await _dbContext.SaveChangesAsync();
 
-		Assert.NotNull(testMethod);
-		Assert.Equal(testEntity, testMethod);
-	}
+			var testMethod = await _exerciseRepository.FindByGuid(testEntity.Id);
 
-	[Fact]
-	public async Task FindExerciseByIdTest_ShouldReturnNullWhenNotFound()
-	{
-		var testMethod = await _exerciseRepository.FindExerciseByGuid(Guid.NewGuid());
-		Assert.Null(testMethod);
-	}
+			Assert.NotNull(testMethod);
+			Assert.Equal(testEntity, testMethod);
+		}
 
-	[Fact]
-	public async Task SaveExerciseTest_ShouldReturnExerciseEntity()
-	{
-		var testEntity = Exercise.Create("name", "category", "muscle group", null);
-		var testMethod = await _exerciseRepository.SaveExercise(testEntity);
-		var exists = await _dbContext.Exercise.FindAsync(testEntity.Id);
+		[Fact]
+		public async Task FindExerciseByIdTest_ShouldReturnNullWhenNotFound()
+		{
+			var testMethod = await _exerciseRepository.FindByGuid(Guid.NewGuid());
+			Assert.Null(testMethod);
+		}
 
-		Assert.NotNull(testMethod);
-		Assert.NotNull(exists);
-		Assert.Equal(testMethod, exists);
-	}
+		[Fact]
+		public async Task SaveExerciseTest_ShouldReturnExerciseEntity()
+		{
+			var testEntity = Exercise.Create("name", "category", "muscle group", null);
+			var testMethod = await _exerciseRepository.SaveNew(testEntity);
+			var exists = await _dbContext.Exercise.FindAsync(testEntity.Id);
 
-	[Fact]
-	public async Task UpdateExerciseTest_ShouldReturnNewExerciseEntity()
-	{
-		var testEntity = Exercise.Create("name", "category", "muscle group", null);
-		var updateEntity = ExerciseUpdateModel.Create("Hello", null, null, null);
-		await _dbContext.Exercise.AddAsync(testEntity);
-		await _dbContext.SaveChangesAsync();
+			Assert.NotNull(testMethod);
+			Assert.NotNull(exists);
+			Assert.Equal(testMethod, exists);
+		}
 
-		var target = await _dbContext.Exercise.FindAsync(testEntity.Id);
-		var testMethod = await _exerciseRepository.UpdateExercise(target!, updateEntity);
+		[Fact]
+		public async Task UpdateExerciseTest_ShouldReturnNewExerciseEntity()
+		{
+			var testEntity = Exercise.Create("name", "category", "muscle group", null);
+			var updateEntity = ExerciseUpdateModel.Create("Hello", null, null, null);
+			await _dbContext.Exercise.AddAsync(testEntity);
+			await _dbContext.SaveChangesAsync();
 
-		var check = await _dbContext.Exercise.FindAsync(testEntity.Id);
-		Assert.True(testMethod);
-		Assert.Equal(updateEntity.Name, check!.Name);
-		Assert.Equal(testEntity.Category, check.Category);
-	}
+			var target = await _dbContext.Exercise.FindAsync(testEntity.Id);
+			var testMethod = await _exerciseRepository.Update(target!, updateEntity);
 
-	[Fact]
-	public async Task DeleteExerciseTest_ShouldReturnTrue()
-	{
-		var testEntity = Exercise.Create("name", "category", "muscle group", null);
-		await _dbContext.Exercise.AddAsync(testEntity);
-		await _dbContext.SaveChangesAsync();
+			var check = await _dbContext.Exercise.FindAsync(testEntity.Id);
+			Assert.True(testMethod);
+			Assert.Equal(updateEntity.Name, check!.Name);
+			Assert.Equal(testEntity.Category, check.Category);
+		}
 
-		var exercise = await _dbContext.Exercise.FindAsync(testEntity.Id);
-		var testMethod = await _exerciseRepository.DeleteExercise(exercise!);
+		[Fact]
+		public async Task DeleteExerciseTest_ShouldReturnTrue()
+		{
+			var testEntity = Exercise.Create("name", "category", "muscle group", null);
+			await _dbContext.Exercise.AddAsync(testEntity);
+			await _dbContext.SaveChangesAsync();
 
-		Assert.True(testMethod);
+			var exercise = await _dbContext.Exercise.FindAsync(testEntity.Id);
+			var testMethod = await _exerciseRepository.Delete(exercise!);
+
+			Assert.True(testMethod);
+		}
 	}
 }

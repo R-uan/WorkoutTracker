@@ -8,7 +8,7 @@ namespace WorkoutTracker.Application.Services
 	{
 		public async Task<UserModel> CreateNewUser(UserModel data)
 		{
-			var user = User.Create(data);
+			var user = User.FromModel(data);
 			var savedUser = await _service.SaveNew(user);
 			return UserModel.Create(savedUser);
 		}
