@@ -28,4 +28,11 @@ public class WorkoutService(IWorkoutRepository _workoutRepository, IUserReposito
 		return await _workoutRepository.FindByGuid(workoutGuid) ??
 		throw new KeyNotFoundException("Workout was not found.");
 	}
+
+	public async Task<bool> DeleteByGuid(Guid workoutGuid)
+	{
+		var exercise = await _workoutRepository.FindByGuid(workoutGuid) ??
+		throw new KeyNotFoundException("Could not find workout.");
+		return await _workoutRepository.Delete(exercise);
+	}
 }

@@ -109,4 +109,36 @@ public class WorkoutServiceTests
 		Assert.IsType<KeyNotFoundException>(exception);
 		Assert.Equal("User was not found.", exception.Message);
 	}
+
+	[Fact]
+	public async Task DeleteWorkoutTest_ShouldReturnTrue()
+	{
+		var testWorkout = WorkoutModel.Create("name", DateTime.Now, 0, null);
+		_mockWorkoutRepository.Setup(w => w.FindByGuid(It.IsAny<Guid>()))
+		.ReturnsAsync(Workout.FromModel(testWorkout, Guid.NewGuid()));
+
+		_mockWorkoutRepository.Setup(x => x.Delete(It.IsAny<Workout>())).ReturnsAsync(true);
+
+		var delete = await _workoutService.DeleteByGuid(Guid.NewGuid());
+
+		_mockWorkoutRepository.Verify(x => x.Delete(It.IsAny<Workout>()), Times.Once);
+		_mockWorkoutRepository.Verify(x => x.FindByGuid(It.IsAny<Guid>()), Times.Once);
+
+		Assert.True(delete);
+	}
+
+	[Fact]
+	public async Task DeleteWorkoutTest_ShouldThrowKeyNotFoundException()
+	{
+		var testWorkout = WorkoutModel.Create("name", DateTime.Now, 0, null);
+		_mockWorkoutRepository.Setup(w => w.FindByGuid(It.IsAny<Guid>()))
+		.ReturnsAsync((Workout)null!);
+
+		var exception = await Assert.ThrowsAsync<KeyNotFoundException>(
+			async () => await _workoutService.DeleteByGuid(Guid.NewGuid())
+		);
+		_mockWorkoutRepository.Verify(x => x.FindByGuid(It.IsAny<Guid>()), Times.Once);
+	}
+
+
 }
