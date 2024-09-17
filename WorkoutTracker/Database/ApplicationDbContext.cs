@@ -23,6 +23,9 @@ namespace WorkoutTracker.Database
 				user.ToTable("users");
 				user.HasKey(user => user.Id);
 
+				user.HasIndex(user => user.Email).IsUnique();
+				user.HasIndex(user => user.Username).IsUnique();
+
 				user.HasMany(user => user.Workouts)
 				.WithOne(workout => workout.User)
 				.HasForeignKey(workout => workout.UserId);
