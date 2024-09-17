@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WorkoutTracker.Application.Interfaces;
 using WorkoutTracker.Database;
 using WorkoutTracker.Database.Entities;
@@ -20,6 +21,13 @@ namespace WorkoutTracker.Application.Repositories
 			_db.User.Remove(entity);
 			var deletions = await _db.SaveChangesAsync();
 			return deletions > 0;
+		}
+
+		public async Task<User?> FindByEmail(string email)
+		{
+			return await (from user in _db.User
+										where user.Email == email
+										select user).FirstOrDefaultAsync();
 		}
 	}
 }

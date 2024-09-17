@@ -12,5 +12,11 @@ namespace WorkoutTracker.Application.Services
 			var savedUser = await _service.SaveNew(user);
 			return UserModel.Create(savedUser);
 		}
+
+		public async Task<User> FindByEmail(string email)
+		{
+			return await _service.FindByEmail(email) ??
+			throw new KeyNotFoundException("Unable to find user associated with given email.");
+		}
 	}
 }

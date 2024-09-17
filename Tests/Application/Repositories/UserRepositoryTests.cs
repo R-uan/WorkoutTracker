@@ -63,5 +63,25 @@ namespace Tests.Application.Repositories
 
 			Assert.True(testMethod);
 		}
+
+		[Fact]
+		public async Task FindByEmail_ShouldReturnUserEntity()
+		{
+			var testUser = User.Create("username", "email", "password");
+			await _dbContext.User.AddAsync(testUser);
+			await _dbContext.SaveChangesAsync();
+
+			var findUser = await _repository.FindByEmail(testUser.Email);
+
+			Assert.NotNull(findUser);
+			Assert.IsType<User>(findUser);
+		}
+
+		[Fact]
+		public async Task FindByEmail_ShouldReturnNull()
+		{
+			var findUser = await _repository.FindByEmail("nullEmail@gmail.com");
+			Assert.Null(findUser);
+		}
 	}
 }
