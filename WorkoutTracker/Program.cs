@@ -6,6 +6,7 @@ using WorkoutTracker.Application.Services;
 using WorkoutTracker.Application.Interfaces;
 using WorkoutTracker.Application.Repositories;
 using WorkoutTracker.Application.Utilities.Validators;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(db => db.UseNpgsql(builder.C
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IValidator<UserModel>, UserModelValidator>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x => {
+    x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters {
+        ValidateIssuer = true,
+        
+    };
+});
 
 var app = builder.Build();
 
